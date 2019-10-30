@@ -22,11 +22,11 @@ _C.MODEL.DEVICE = "cuda"
 # ID number of GPU
 _C.MODEL.DEVICE_ID = '1,2,3'
 # Name of backbone
-_C.MODEL.NAME = 'se_resnext50'
+_C.MODEL.NAME = 'resnet101_ibn_a'
 # Last stride of backbone
 _C.MODEL.LAST_STRIDE = 1
 # Path to pretrained model of backbone
-_C.MODEL.PRETRAIN_PATH = '/home/handsome/.torch/models/se_resnext50_32x4d-a260b3a4.pth'
+_C.MODEL.PRETRAIN_PATH = ''
 #
 # Use ImageNet pretrained model to initialize backbone or use self trained model to initialize the whole model
 # Options: 'imagenet' or 'self'

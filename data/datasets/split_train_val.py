@@ -14,7 +14,7 @@ if __name__ == '__main__':
     qf = open(query_file, "w")
     gf = open(gallery_file, "w")
 
-    pids_dict = {str(i):list() for i in range(4000, 5000)}
+    pids_dict = {str(i):list() for i in range(4500, 5000)}
     for line in test_total_lines:
         img_path, pid = line.strip().split()
         # pids[int(pid)] += 1
