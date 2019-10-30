@@ -119,7 +119,7 @@ def train(cfg):
 def main():
     parser = argparse.ArgumentParser(description="ReID Baseline Training")
     parser.add_argument(
-        "--config_file", default="", help="path to config file", type=str
+        "--config_file", default="../configs/softmax_triplet_with_center.yml", help="path to config file", type=str
     )
     parser.add_argument("opts", help="Modify config options using the command-line", default=None,
                         nargs=argparse.REMAINDER)
@@ -156,3 +156,9 @@ def main():
 
 if __name__ == '__main__':
     main()
+# The test feature is normalized
+# 2019-10-26 20:06:12,308 reid_baseline.train INFO: Validation Results - Epoch: 120
+# 2019-10-26 20:06:12,309 reid_baseline.train INFO: mAP: 87.5%
+# 2019-10-26 20:06:12,309 reid_baseline.train INFO: CMC curve, Rank-1  :94.7%
+# 2019-10-26 20:06:12,309 reid_baseline.train INFO: CMC curve, Rank-5  :98.3%
+# 2019-10-26 20:06:12,309 reid_baseline.train INFO: CMC curve, Rank-10 :99.1%

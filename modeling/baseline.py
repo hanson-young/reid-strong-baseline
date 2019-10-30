@@ -171,9 +171,19 @@ class Baseline(nn.Module):
                 # print("Test with feature before BN")
                 return global_feat
 
+    # def load_param(self, trained_path):
+    #     param_dict = torch.load(trained_path)
+    #     for i in param_dict:
+    #         if 'classifier' in i:
+    #             continue
+    #         self.state_dict()[i].copy_(param_dict[i])
+
+
+
     def load_param(self, trained_path):
         param_dict = torch.load(trained_path)
-        for i in param_dict:
-            if 'classifier' in i:
+        for k,v in param_dict.state_dict().items():
+
+            if 'classifier' in k:
                 continue
-            self.state_dict()[i].copy_(param_dict[i])
+            self.state_dict()[k].copy_(param_dict.state_dict()[k])
