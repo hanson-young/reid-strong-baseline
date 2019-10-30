@@ -9,8 +9,8 @@ import torch
 import torch.nn as nn
 from ignite.engine import Engine
 
-from utils.reid_metric import R1_mAP, R1_mAP_reranking
-
+from utils.reid_metric import R1_mAP, R1_mAP_reranking, Submit
+import json
 
 def create_supervised_evaluator(model, metrics,
                                 device=None):
@@ -33,10 +33,10 @@ def create_supervised_evaluator(model, metrics,
     def _inference(engine, batch):
         model.eval()
         with torch.no_grad():
-            data, pids, camids = batch
+            data, pids, camids, path = batch
             data = data.to(device) if torch.cuda.device_count() >= 1 else data
             feat = model(data)
-            return feat, pids, camids
+            return feat, pids, camids, path
 
     engine = Engine(_inference)
 
@@ -60,16 +60,30 @@ def inference(
         print("Create evaluator")
         evaluator = create_supervised_evaluator(model, metrics={'r1_mAP': R1_mAP(num_query, max_rank=50, feat_norm=cfg.TEST.FEAT_NORM)},
                                                 device=device)
+        evaluator.run(val_loader)
+        cmc, mAP = evaluator.state.metrics['r1_mAP']
+        logger.info('Validation Results')
+        logger.info("mAP: {:.1%}".format(mAP))
+        for r in [1, 5, 10]:
+            logger.info("CMC curve, Rank-{:<3}:{:.1%}".format(r, cmc[r - 1]))
+
     elif cfg.TEST.RE_RANKING == 'yes':
         print("Create evaluator for reranking")
         evaluator = create_supervised_evaluator(model, metrics={'r1_mAP': R1_mAP_reranking(num_query, max_rank=50, feat_norm=cfg.TEST.FEAT_NORM)},
                                                 device=device)
-    else:
-        print("Unsupported re_ranking config. Only support for no or yes, but got {}.".format(cfg.TEST.RE_RANKING))
+        evaluator.run(val_loader)
+        cmc, mAP = evaluator.state.metrics['r1_mAP']
+        logger.info('Validation Results')
+        logger.info("mAP: {:.1%}".format(mAP))
+        for r in [1, 5, 10]:
+            logger.info("CMC curve, Rank-{:<3}:{:.1%}".format(r, cmc[r - 1]))
 
-    evaluator.run(val_loader)
-    cmc, mAP = evaluator.state.metrics['r1_mAP']
-    logger.info('Validation Results')
-    logger.info("mAP: {:.1%}".format(mAP))
-    for r in [1, 5, 10]:
-        logger.info("CMC curve, Rank-{:<3}:{:.1%}".format(r, cmc[r - 1]))
+    else:
+        evaluator = create_supervised_evaluator(model, metrics={'submit': Submit(num_query, max_rank=200, feat_norm=cfg.TEST.FEAT_NORM)},
+                                                device=device)
+        evaluator.run(val_loader)
+        img_mat = evaluator.state.metrics['submit']
+        with open('submit.json','w') as f:
+            json.dump(img_mat, f)
+
+

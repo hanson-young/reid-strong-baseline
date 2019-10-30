@@ -7,13 +7,14 @@
 from .dukemtmcreid import DukeMTMCreID
 from .market1501 import Market1501
 from .msmt17 import MSMT17
-from .kesci import Kesci
+from .kesci import Kesci,KesciA
 from .veri import VeRi
 from .dataset_loader import ImageDataset
 
 __factory = {
     'market1501': Market1501,
     'kesci': Kesci,
+    'kesciA': KesciA,
     'dukemtmc': DukeMTMCreID,
     'msmt17': MSMT17,
     'veri': VeRi,

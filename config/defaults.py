@@ -20,7 +20,7 @@ _C.MODEL = CN()
 # Using cuda or cpu for training
 _C.MODEL.DEVICE = "cuda"
 # ID number of GPU
-_C.MODEL.DEVICE_ID = '0,1'
+_C.MODEL.DEVICE_ID = '1,2,3'
 # Name of backbone
 _C.MODEL.NAME = 'se_resnext50'
 # Last stride of backbone
@@ -58,12 +58,13 @@ _C.INPUT.PROB = 0.5
 # Random probability for random erasing
 _C.INPUT.RE_PROB = 0.5
 # Values to be used for image normalization
-_C.INPUT.PIXEL_MEAN = [0.485, 0.456, 0.406]
+_C.INPUT.PIXEL_MEAN = [0.09661545132935477, 0.18356956955890383, 0.21322472792945668]
 # Values to be used for image normalization
-_C.INPUT.PIXEL_STD = [0.229, 0.224, 0.225]
+_C.INPUT.PIXEL_STD = [0.17483382734478947, 0.16510604114266944, 0.22086535365381385]
 # Value of padding size
 _C.INPUT.PADDING = 10
-
+# Mean is [0.09661545132935477, 0.18356956955890383, 0.21322472792945668]
+# Std is [0.17483382734478947, 0.16510604114266944, 0.22086535365381385]
 # -----------------------------------------------------------------------------
 # Dataset
 # -----------------------------------------------------------------------------
